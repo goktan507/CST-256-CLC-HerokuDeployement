@@ -3,10 +3,10 @@ namespace App\Services\Data;
 
 class SecurityDAO
 {
-    private $servername = "localhost";
-    private $username = "root";
-    private $password = "root";
-    private $database = "cst-256-clc";
+    private $servername = "hwr4wkxs079mtb19.cbetxkdyhwsb.us-east-1.rds.amazonaws.com";
+    private $username = "r19b09ea1f2iz1p8";
+    private $password = "zqb3ezhiq4qxe1dx";
+    private $database = "jhh3kvw8ugp8fuka";
     private $connection;
     private $dbQuery;
  
