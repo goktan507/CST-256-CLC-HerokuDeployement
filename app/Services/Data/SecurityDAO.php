@@ -5,10 +5,10 @@ use Illuminate\Support\Facades\Auth;
 
 class SecurityDAO
 {
-    private $servername = "localhost";          //All the 
-    private $username = "root";                 //         data credentials
-    private $password = "root";                 //                          set in a private global 
-    private $database = "cst-256-clc";          //                                                  variable to be used in connection
+    private $servername = "hwr4wkxs079mtb19.cbetxkdyhwsb.us-east-1.rds.amazonaws.com";          //All the 
+    private $username = "r19b09ea1f2iz1p8";                 //         data credentials
+    private $password = "zqb3ezhiq4qxe1dx";                 //                          set in a private global 
+    private $database = "jhh3kvw8ugp8fuka";          //                                                  variable to be used in connection
     private $connection;                    
     private $dbQuery;
  
