@@ -22,7 +22,7 @@
 }
 
 input[type=submit] {
-    width: 6em;  height: 3em;
+    width: 8em;  height: 3em;
 }
 
 /* Responsive layout - makes a one column-layout instead of a two-column layout */
@@ -57,9 +57,16 @@ input[type=submit] {
                                     <li class="list-group-item bg-primary"></li>                             
                                 </ul>
                                 <h5 class="card-text" style="padding-top: 15px">Phone: {{ $user['phonenumber'] }} </h5>
-                                <input type="submit" class="btn btn-dark" name="editUser" width="10px" height="5px" value="Edit"/>
+                                <input type="submit" class="btn btn-dark" name="editUser" width="10px" height="5px" value="Edit Profile"/>
                         	</div>
                             </form>
+                            <div class="card-body">
+							<form action="{{ action('UserController@adminEditPortfolio') }}" method="post">
+								{{ csrf_field() }}
+								<input type="hidden" name="userID" value="{{ $user['userID'] }}"></input>
+								<input type="submit" class="btn btn-dark" name="editPortfolio" value="Edit Portfolio"/>
+							</form>
+							</div>
                             <div class="card-body">
 							<form action="{{ action('UserController@adminSuspendProfile') }}" method="post">
 								{{ csrf_field() }}

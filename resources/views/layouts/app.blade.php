@@ -10,6 +10,7 @@
   text-align: center;
 }
 </style>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,6 +31,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+	<?php if(session_status() != PHP_SESSION_ACTIVE){
+	    session_start();
+	}?>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             <div class="container">
@@ -88,9 +92,34 @@
                                     </form>
                                     
                                     <!-- Profile Tab Ends -->
-                                    <!-- Admin Tab Starts -->
+                                    <!-- Portfolio Tab Starts -->
                                     
-                                    <a class="dropdown-item" href="/profile"
+                                    <a class="dropdown-item" href="/portfolio"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('portfolio').submit();">
+                                        Portfolio
+                                    </a>
+
+                                    <form id="portfolio" action="{{ action('UserController@getPortfolio') }}" method="GET" style="display: none;">
+                                        @csrf
+                                    </form>
+                                    
+                                    <!-- Portfolio Tab Ends -->
+                                    <!-- Jobs Tab Starts -->
+                                    <a class="dropdown-item" href="/get_jobs"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('jobs').submit();">
+                                        Jobs
+                                    </a>
+
+                                    <form id="jobs" action="{{ action('UserController@getAllJobs') }}" method="GET" style="display: none;">
+                                        @csrf
+                                    </form>
+                                    
+                                    <!-- Jobs Tab Ends -->
+                                    <!-- Admin Tab Starts -->
+                                    @if($_SESSION['admin'] == true)
+                                    <a class="dropdown-item" href="/get_profiles"
                                        onclick="event.preventDefault();
                                                      document.getElementById('admin').submit();">
                                         Admin - Edit Users
@@ -99,7 +128,7 @@
                                     <form id="admin" action="{{ action('UserController@getAllProfiles') }}" method="GET" style="display: none;">
                                         @csrf
                                     </form>
-                                    
+                                    @endif
                                     <!-- Admin Tab Ends -->
                                 </div>
                             </li>

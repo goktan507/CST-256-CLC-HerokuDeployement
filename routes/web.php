@@ -33,5 +33,19 @@ Route::post('/suspend_profile_admin', 'UserController@adminSuspendProfile');
 
 Route::post('/delete_profile_admin', 'UserController@adminDeleteProfile');
 
+Route::get('/portfolio', 'UserController@getPortfolio');
+
+Route::post('/update_portfolio', 'UserController@updatePortfolio');
+
+Route::post('/edit_portfolio_admin', 'UserController@adminEditPortfolio');
+
+Route::post('/update_portfolio_admin', 'UserController@adminUpdatePortfolio');
+
+Route::get('/get_jobs', 'UserController@getAllJobs');
+
+Route::post('/delete_portfolio', 'UserController@deletePortfolio');
+
+
+
 
 
