@@ -324,7 +324,7 @@ class SecurityDAO
             while($row = mysqli_fetch_assoc($result)){
                 $groupID = $row['id']; 
                 $members = $this->getGroupMembers($groupID);
-                $dbQuery2 = "SELECT * FROM `membership` WHERE `groups_id` = '$groupID'"; // to display members, gets information from different table
+                $dbQuery2 = "SELECT * FROM `groups` WHERE `id` = '$groupID'"; // to display members, gets information from different table
                 $result2 = mysqli_query($this->connection, $dbQuery2);
                 if(mysqli_num_rows($result2) > 0){
                     $userID = $row['users_id'];
