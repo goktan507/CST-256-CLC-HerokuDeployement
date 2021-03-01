@@ -331,7 +331,8 @@ class SecurityDAO
                 }
                 $dbQuery3 = "SELECT * FROM `users` WHERE `id` = '$userID'"; // to display the owner, gets information from different table
                 $result3 = mysqli_query($this->connection, $dbQuery3);
-                if(mysqli_num_rows($result3) > 0){
+	$row3;                
+if(mysqli_num_rows($result3) > 0){
                     $row3 = mysqli_fetch_assoc($result3);
                 }
                 //creates a group array to store all neccessary information
