@@ -21,14 +21,14 @@
     <title>{{ 'CST-256 CLC' }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('public/js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
 </head>
 <body>
 	<?php if(session_status() != PHP_SESSION_ACTIVE){
@@ -117,6 +117,18 @@
                                     </form>
                                     
                                     <!-- Jobs Tab Ends -->
+                                    <!-- Affinity Groups Tab Starts -->
+                                    <a class="dropdown-item" href="/get_groups"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('groups').submit();">
+                                        Affinity Groups
+                                    </a>
+
+                                    <form id="groups" action="{{ action('UserController@getAllGroups') }}" method="GET" style="display: none;">
+                                        @csrf
+                                    </form>
+                                    
+                                    <!-- Affinity Gruops Tab Ends -->
                                     <!-- Admin Tab Starts -->
                                     @if($_SESSION['admin'] == true)
                                     <a class="dropdown-item" href="/get_profiles"

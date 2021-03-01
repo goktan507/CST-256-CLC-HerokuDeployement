@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Profile Page')
 @section('content')
+
 <body>
 	<div>
 		<form action="{{ action('UserController@updateUserProfile') }}" method="post">

@@ -1,3 +1,6 @@
+	<?php if(session_status() != PHP_SESSION_ACTIVE){
+	    session_start();
+	}?>
 @extends('layouts.app')
 @section('title', 'Admin All Profiles Page')
 @section('content')
@@ -33,6 +36,10 @@ input[type=submit] {
 }
 </style>
 </head>
+@guest
+	<h2 style="text-align: center">Please login first!</h2>
+@else
+	@if($_SESSION['admin'] == true)
 <body>
 	<div align="center">
 		@foreach($data as $user)
@@ -87,4 +94,8 @@ input[type=submit] {
 		@endforeach
 	</div>
 </body>
+	@else
+		<h2 style="text-align: center">You need to be admin to view this page</h2>
+	@endif
+@endguest
 @endsection

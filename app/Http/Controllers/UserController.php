@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\Security\SecurityService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -54,19 +53,19 @@ class UserController extends Controller
             'biography' => $_POST['biography']
         ];
         $this->service->adminUpdateSelectedProfile($data);  //passes all the information stored in data array to security service
-        return $this->getAllProfiles();
+        return redirect('get_profiles'); 
     }
     
     public function adminSuspendProfile(){
         $userID = $_POST['userID']; //in order to suspend correct user, gets the user ID from the form as hidden key
         $this->service->adminSuspendProfile($userID);    //passes the userID to security service
-        return $this->getAllProfiles();     //return to admin module by getting all the active profiles on cite.
+        return redirect('get_profiles');     //return to admin module by getting all the active profiles on cite.
     }
     
     public function adminDeleteProfile(){
         $userID = $_POST['userID']; //in order to delete correct user, gets the user ID from the form as hidden key
         $this->service->adminDeleteProfile($userID);    //passes the userID to security service
-        return $this->getAllProfiles();     //return to admin module by getting all existing and active profiles on cite
+        return redirect('get_profiles');     //return to admin module by getting all existing and active profiles on cite
     }
     
     public function getPortfolio(){
@@ -85,7 +84,7 @@ class UserController extends Controller
             'education' => $_POST['education']
         ];
         $this->service->updatePortfolio($data);     //passes the portfolio information stored in data array to security service
-        return $this->getPortfolio();       //return so portfolio page, after getting the updated portfolio
+        return redirect('get_portfolio');      //return so portfolio page, after getting the updated portfolio
     }
     
     public function adminEditPortfolio(){
@@ -104,7 +103,7 @@ class UserController extends Controller
             'education' => $_POST['education']
         ];
         $this->service->adminUpdatePortfolio($data);    //passes the portfolio information stored in data array to security service
-        return $this->getAllProfiles();     //returns to admin module getting all the updated user profiles
+        return redirect('get_profiles');    //returns to admin module getting all the updated user profiles
     }
     
     public function getAllJobs(){
@@ -115,6 +114,59 @@ class UserController extends Controller
     public function deletePortfolio(){
         $userID = $_POST['userID'];     // admin module, passes the userID from the form method post, hidden userID key
         $this->service->deletePortfolio($userID);   //passes the userID to security service
-        return $this->getAllJobs();     //returns to job page to see if the the job posting was deleted
+        return redirect('get_jobs');     //returns to job page to see if the the job posting was deleted
+    }
+    
+    public function getAllGroups(){
+        $data = $this->service->getAllGroups();
+        return view('groups')->with('data', $data);
+    }
+    
+    public function deleteGroup(){
+        $groupID = $_POST['groupID'];
+        $this->service->deleteGroup($groupID);
+        return redirect('get_groups');
+    }
+    
+    public function editGroup(){
+        $groupID = $_POST['groupID'];
+        $data = $this->service->editGroup($groupID);
+        return view('editGroup')->with('data', $data);
+    }
+    
+    public function updateGroup(){
+        $data = [
+            'groupID' => $_POST['groupID'],
+            'name' => $_POST['name'],
+            'description' => $_POST['description']
+        ];
+        $this->service->updateGroup($data);
+        return redirect('get_groups');
+    }
+    
+    public function getCreateGroup(){
+        return view('createGroup');
+    }
+    
+    public function createGroup(){
+        $data = [
+            'name' => $_POST['name'],
+            'description' => $_POST['description'],
+            'userID' => Auth::user()->id
+        ];
+        $this->service->createGroup($data);
+        return redirect('get_groups');
+    }
+    
+    public function joinGroup(){
+        $groupID = $_POST['groupID'];
+        $this->service->joinGroup($groupID);
+        return redirect('get_groups');
+    }
+    
+    public function leaveGroup(){
+        $groupID = $_POST['groupID'];
+        $this->service->leaveGroup($groupID);
+        return redirect('get_groups');
     }
 }

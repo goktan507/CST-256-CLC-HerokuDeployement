@@ -5,10 +5,10 @@ use Illuminate\Support\Facades\Auth;
 
 class SecurityDAO
 {
-    private $servername = "hwr4wkxs079mtb19.cbetxkdyhwsb.us-east-1.rds.amazonaws.com";          //All the 
-    private $username = "r19b09ea1f2iz1p8";                 //         data credentials
-    private $password = "zqb3ezhiq4qxe1dx";                 //                          set in a private global 
-    private $database = "jhh3kvw8ugp8fuka";          //                                                  variable to be used in connection
+    private $servername = "localhost";          //All the 
+    private $username = "root";                 //         data credentials
+    private $password = "root";                 //                          set in a private global 
+    private $database = "cst-256-clc";          //                                                  variable to be used in connection
     private $connection;                    
     private $dbQuery;
  
@@ -314,6 +314,124 @@ class SecurityDAO
             mysqli_close($this->connection);
             return $isAdmin;    //passes the isAdmin value either 1 (true-> admin) or 0 (false-> normal user)
         }
+    }
+    
+    public function getAllGroups(){
+        $this->dbQuery = "SELECT * FROM `groups`";     //sql script gets all groups
+        $result = mysqli_query($this->connection, $this->dbQuery);
+        $data = [];
+        if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_assoc($result)){
+                $groupID = $row['id']; 
+                $members = $this->getGroupMembers($groupID);
+                $dbQuery2 = "SELECT * FROM `membership` WHERE `groups_id` = '$groupID'"; // to display members, gets information from different table
+                $result2 = mysqli_query($this->connection, $dbQuery2);
+                if(mysqli_num_rows($result2) > 0){
+                    $userID = $row['users_id'];
+                }
+                $dbQuery3 = "SELECT * FROM `users` WHERE `id` = '$userID'"; // to display the owner, gets information from different table
+                $result3 = mysqli_query($this->connection, $dbQuery3);
+                if(mysqli_num_rows($result3) > 0){
+                    $row3 = mysqli_fetch_assoc($result3);
+                }
+                //creates a group array to store all neccessary information
+                $group = [
+                    'groupID' => $groupID,
+                    'name' => $row['name'],
+                    'description' => $row['description'],
+                    'userID' => $userID,
+                    'owner' => $row3['name'],
+                    'members' => $members
+                ];
+                array_push($data, $group);   //puts group array into a data array that will store all group infos 
+            }
+            mysqli_free_result($result);
+            mysqli_close($this->connection);
+            return $data; //returns all groups stored in data array
+        }
+        mysqli_close($this->connection);
+        return false;
+    }
+    
+    public function getGroupMembers($groupID){
+        $membersQuery = "SELECT * FROM `membership` WHERE `groups_id` = '$groupID'";      // sql script gets members of specific group using groupID
+        $result = mysqli_query($this->connection, $membersQuery);
+        $members = [];      //array that stores all the members' names
+        if(mysqli_num_rows($result) > 0){
+            while($row = mysqli_fetch_assoc($result)){  //while loop to get every user id that are joined to same group
+                $userID = $row['users_id'];
+                $usersQuery = "SELECT * FROM `users` WHERE `id` = '$userID'";      //sql script gets user name using userID found above 
+                $result2 = mysqli_query($this->connection, $usersQuery);
+                if($row2 = mysqli_fetch_assoc($result2)){
+                    array_push($members, $row2['name']);        //puts the name of the user into members array to be returned
+                }
+            }
+        }
+        return $members;    //returns the members of the group
+    }
+    
+    public function deleteGroup($groupID){
+        $deleteQuery = "DELETE FROM `groups` WHERE `id` = '$groupID'";  //sql script that deletes group (within the members of its being created as one-to-many relation
+        mysqli_query($this->connection, $deleteQuery);                  //that has a relationship of cascade on delete or on update
+        return TRUE;
+    }
+    
+    public function editGroup($groupID){
+        $this->dbQuery = "SELECT * FROM `groups` WHERE `id`='$groupID'";    //sql script that gets the group related to groupID
+        $result = mysqli_query($this->connection, $this->dbQuery);
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+            //creates a data array to store all the group information
+            $data = [
+                'groupID'=>$groupID,
+                'name'=>$row['name'],
+                'description'=>$row['description']
+            ];
+            mysqli_free_result($result);
+            mysqli_close($this->connection);
+            return $data;   //returns the all group information stored in data array
+        }
+    }
+    
+    public function updateGroup($data){
+        // to use in sql script, assigning each variable passed in data array into separate variables.
+        $groupID = $data['groupID'];
+        $name = $data['name'];
+        $description = $data['description'];
+        
+        // sql script updates the group related to groupID, using all the information passed from the form in data array
+        $this->dbQuery = "UPDATE `groups` SET `name` = '$name', `description` = '$description' WHERE `id`='$groupID'";
+        $result = mysqli_query($this->connection, $this->dbQuery);
+        if ($result) {
+            return TRUE;    //update is always true, no validation required
+        }
+        return FALSE;   //if connection or query gives error, returns false
+    }
+    
+    public function createGroup($data){
+        // to use in sql script, assigning each variable passed in data array into separate variables.
+        $name = $data['name'];
+        $description = $data['description'];
+        $userID = $data['userID'];
+        //sql script to insert (create) a groups table using passed variables 
+        $insertQuery = "INSERT INTO `groups` (`id`, `name`, `description`, `users_id`) VALUES (NULL, '$name', '$description', '$userID')";
+        if(mysqli_query($this->connection, $insertQuery))
+            return TRUE;    // create is always true, no validation required.
+       return false;    //if connection or query gives error, returns false
+    }
+    
+    public function joinGroup($groupID){
+        $userID = Auth::user()->id; //gets the user id that is logged in (the user performs join to group is the one that is logged in)
+        $insertQuery = "INSERT INTO `membership` (`id`, `groups_id`, `users_id`) VALUES (NULL, '$groupID', '$userID')";     //sql script that inserts a new membership for groups
+        mysqli_query($this->connection, $insertQuery);                                                                      //that has user id and group id meaning that user has
+        return TRUE;    // create is always true, no validation required.                                                   //joined the the group that has id of groupID
+    }
+    
+    public function leaveGroup($groupID){
+        $userID = Auth::user()->id; //gets the user id that is logged in (the user performs leave to group is the one that is logged in)
+        $deleteQuery = "DELETE FROM `membership` WHERE `groups_id` = '$groupID' AND `users_id` = '$userID'";  //sql script that deletes membership that provides
+        mysqli_query($this->connection, $deleteQuery);                                                        //user id and group id, by deleting the membership
+        return TRUE;   // create is always true, no validation required.                                      //we destroy the relationship between user and group
     }
 }
 

@@ -66,5 +66,33 @@ class SecurityService
     public function isAdmin($userID){
         return $this->dao->isAdmin($userID); //passes the value to securityDAO
     }
+    
+    public function getAllGroups(){
+        return $this->dao->getAllGroups();
+    }
+    
+    public function deleteGroup($groupID){
+        return $this->dao->deleteGroup($groupID);
+    }
+    
+    public function editGroup($groupID){
+        return $this->dao->editGroup($groupID);        
+    }
+    
+    public function updateGroup($data){
+        return $this->dao->updateGroup($data);
+    }
+    
+    public function createGroup($data){
+        return $this->dao->createGroup($data);
+    }
+    
+    public function joinGroup($groupID){
+        return $this->dao->joinGroup($groupID);
+    }
+    
+    public function leaveGroup($groupID){
+        return $this->dao->leaveGroup($groupID);
+    }
 }
 

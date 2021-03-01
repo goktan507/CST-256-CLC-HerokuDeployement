@@ -33,7 +33,7 @@ Route::post('/suspend_profile_admin', 'UserController@adminSuspendProfile');
 
 Route::post('/delete_profile_admin', 'UserController@adminDeleteProfile');
 
-Route::get('/portfolio', 'UserController@getPortfolio');
+Route::get('/get_portfolio', 'UserController@getPortfolio');
 
 Route::post('/update_portfolio', 'UserController@updatePortfolio');
 
@@ -44,6 +44,28 @@ Route::post('/update_portfolio_admin', 'UserController@adminUpdatePortfolio');
 Route::get('/get_jobs', 'UserController@getAllJobs');
 
 Route::post('/delete_portfolio', 'UserController@deletePortfolio');
+
+Route::get('/get_groups', 'UserController@getAllGroups');
+
+Route::post('/delete_group', 'UserController@deleteGroup');
+
+Route::post('/edit_group', 'UserController@editGroup');
+
+Route::post('/update_group', 'UserController@updateGroup');
+
+Route::post('/create_group', 'UserController@createGroup');
+
+Route::get('/get_create_group', 'UserController@getCreateGroup');
+
+Route::post('/join_group', 'UserController@joinGroup');
+
+Route::post('/leave_group', 'UserController@leaveGroup');
+
+
+
+
+
+
 
 
 
