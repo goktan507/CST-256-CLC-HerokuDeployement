@@ -438,7 +438,7 @@ class SecurityDAO
         if($search == ""){
             return 'getAll';
         }
-        $this->dbQuery = "SELECT * FROM `portfolio` WHERE `job` LIKE '$search' OR `skills` LIKE '$search'";     //sql script gets all groups
+        $this->dbQuery = "SELECT * FROM `portfolio` WHERE `job` LIKE '%$search%' OR `skills` LIKE '%$search%'";     //sql script gets all groups
         $result = mysqli_query($this->connection, $this->dbQuery);
         $data = [];
         if (mysqli_num_rows($result) > 0) {
