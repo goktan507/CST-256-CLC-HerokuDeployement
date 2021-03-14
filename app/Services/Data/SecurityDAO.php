@@ -331,8 +331,7 @@ class SecurityDAO
                 }
                 $dbQuery3 = "SELECT * FROM `users` WHERE `id` = '$userID'"; // to display the owner, gets information from different table
                 $result3 = mysqli_query($this->connection, $dbQuery3);
-	$row3;                
-if(mysqli_num_rows($result3) > 0){
+                if(mysqli_num_rows($result3) > 0){
                     $row3 = mysqli_fetch_assoc($result3);
                 }
                 //creates a group array to store all neccessary information
@@ -433,6 +432,40 @@ if(mysqli_num_rows($result3) > 0){
         $deleteQuery = "DELETE FROM `membership` WHERE `groups_id` = '$groupID' AND `users_id` = '$userID'";  //sql script that deletes membership that provides
         mysqli_query($this->connection, $deleteQuery);                                                        //user id and group id, by deleting the membership
         return TRUE;   // create is always true, no validation required.                                      //we destroy the relationship between user and group
+    }    
+    
+    public function getJobsBySearch($search){
+        if($search == ""){
+            return 'getAll';
+        }
+        $this->dbQuery = "SELECT * FROM `portfolio` WHERE `job` LIKE '$search' OR `skills` LIKE '$search'";     //sql script gets all groups
+        $result = mysqli_query($this->connection, $this->dbQuery);
+        $data = [];
+        if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_assoc($result)){
+                $userID = $row['users_id'];
+                $dbQuery2 = "SELECT * FROM `users` WHERE `id` = '$userID'"; // to display user profile info, gets information from different table
+                $result2 = mysqli_query($this->connection, $dbQuery2);
+                if(mysqli_num_rows($result2) > 0){
+                    $row2 = mysqli_fetch_assoc($result2);
+                }
+                //creates a user array to store all neccessary information
+                $user = [
+                    'userID' => $userID,
+                    'name' => $row2['name'],
+                    'email' => $row2['email'],
+                    'job' => $row['job'],
+                    'skills' => $row['skills'],
+                    'education' => $row['education']
+                ];
+                array_push($data, $user);   //puts user array into a data array that will store all user and its portfolio
+            }
+            mysqli_free_result($result);
+            mysqli_close($this->connection);
+            return $data; //returns all users' portfolios stored in data array
+        }
+        mysqli_close($this->connection);
+        return false;
     }
 }
 

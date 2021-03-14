@@ -118,55 +118,77 @@ class UserController extends Controller
     }
     
     public function getAllGroups(){
-        $data = $this->service->getAllGroups();
-        return view('groups')->with('data', $data);
+        $data = $this->service->getAllGroups();     //request all the groups from security service
+        return view('groups')->with('data', $data);     //returns to groups view page with the data passed from security service
     }
     
     public function deleteGroup(){
-        $groupID = $_POST['groupID'];
-        $this->service->deleteGroup($groupID);
-        return redirect('get_groups');
+        $groupID = $_POST['groupID'];   //the group id passed from form post to delete specific group
+        $this->service->deleteGroup($groupID);  //requests to delete group with groupID being passed to security service
+        return redirect('get_groups');  //redirects back to groups view
     }
     
     public function editGroup(){
-        $groupID = $_POST['groupID'];
-        $data = $this->service->editGroup($groupID);
-        return view('editGroup')->with('data', $data);
+        $groupID = $_POST['groupID'];       //the group id passed from form post to edit specific group
+        $data = $this->service->editGroup($groupID); //requests to get group info with groupID being passed to security service
+        return view('editGroup')->with('data', $data);  //returns to editGroup view to display current information of group
     }
     
     public function updateGroup(){
+        //storing all the information passed from editGroup view
         $data = [
             'groupID' => $_POST['groupID'],
             'name' => $_POST['name'],
             'description' => $_POST['description']
         ];
-        $this->service->updateGroup($data);
-        return redirect('get_groups');
+        $this->service->updateGroup($data);     //passes the data array storing all information, to pass into security service to update group
+        return redirect('get_groups');      //redirects back to the groups view
     }
     
     public function getCreateGroup(){
-        return view('createGroup');
+        return view('createGroup'); //sends to the create group view
     }
     
     public function createGroup(){
+        //storing all the information passed from createGroup view
         $data = [
             'name' => $_POST['name'],
             'description' => $_POST['description'],
             'userID' => Auth::user()->id
         ];
-        $this->service->createGroup($data);
-        return redirect('get_groups');
+        $this->service->createGroup($data); //passes the data array storing all information, to pass into security service to create group
+        return redirect('get_groups');  //redirects back to groups view
     }
     
     public function joinGroup(){
-        $groupID = $_POST['groupID'];
-        $this->service->joinGroup($groupID);
-        return redirect('get_groups');
+        $groupID = $_POST['groupID'];   //the group id passed from form post to join specific group
+        $this->service->joinGroup($groupID);    //passes the groupID that user is trying to join
+        return redirect('get_groups');   //redirects back to groups view
     }
     
     public function leaveGroup(){
-        $groupID = $_POST['groupID'];
-        $this->service->leaveGroup($groupID);
-        return redirect('get_groups');
+        $groupID = $_POST['groupID'];   //the group id passed from form post to leave specific group
+        $this->service->leaveGroup($groupID);     //passes the groupID that user is trying to leave
+        return redirect('get_groups');  //redirects back to groups view
+    }
+    
+    public function getJobsBySearch(){
+        $search = $_POST['search'];
+        $data = $this->service->getJobsBySearch($search);
+        if($data == 'getAll'){
+            return redirect('/get_jobs');
+        }
+        return view('jobs')->with('data', $data);
+    }
+    
+    public function viewJob(){
+        $data = [
+            'name' => $_POST['name'],
+            'email' => $_POST['email'],
+            'job' => $_POST['job'],
+            'skills' => $_POST['skills'],
+            'education' => $_POST['education']
+        ];
+        return view('viewJob')->with('data', $data);            
     }
 }

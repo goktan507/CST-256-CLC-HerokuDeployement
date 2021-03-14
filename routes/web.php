@@ -61,6 +61,14 @@ Route::post('/join_group', 'UserController@joinGroup');
 
 Route::post('/leave_group', 'UserController@leaveGroup');
 
+Route::post('/get_jobs_search', 'UserController@getJobsBySearch');
+
+Route::post('/view_job', 'UserController@viewJob');
+
+
+
+
+
 
 
 

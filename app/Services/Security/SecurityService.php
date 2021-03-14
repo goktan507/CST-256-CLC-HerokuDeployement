@@ -56,7 +56,7 @@ class SecurityService
     }
     
     public function getAllJobs(){
-        return $this->dao->getAllJobs(); //passes the value to securityDAO
+        return $this->dao->getAllJobs(); //passes the request of getting all job posting to securityDAO
     }
     
     public function deletePortfolio($userID){
@@ -68,31 +68,35 @@ class SecurityService
     }
     
     public function getAllGroups(){
-        return $this->dao->getAllGroups();
+        return $this->dao->getAllGroups();  //passes the request of getting all groups to securityDAO
     }
     
     public function deleteGroup($groupID){
-        return $this->dao->deleteGroup($groupID);
+        return $this->dao->deleteGroup($groupID); //passes the value to securityDAO
     }
     
     public function editGroup($groupID){
-        return $this->dao->editGroup($groupID);        
+        return $this->dao->editGroup($groupID);   //passes the value to securityDAO
     }
     
     public function updateGroup($data){
-        return $this->dao->updateGroup($data);
+        return $this->dao->updateGroup($data);   //passes the value to securityDAO
     }
     
     public function createGroup($data){
-        return $this->dao->createGroup($data);
+        return $this->dao->createGroup($data);   //passes the value to securityDAO
     }
     
     public function joinGroup($groupID){
-        return $this->dao->joinGroup($groupID);
+        return $this->dao->joinGroup($groupID);   //passes the value to securityDAO
     }
     
     public function leaveGroup($groupID){
-        return $this->dao->leaveGroup($groupID);
+        return $this->dao->leaveGroup($groupID);   //passes the value to securityDAO
+    }
+    
+    public function getJobsBySearch($search){
+        return $this->dao->getJobsBySearch($search);
     }
 }
 
